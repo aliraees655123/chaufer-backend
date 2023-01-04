@@ -15,6 +15,37 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 app.use(cors())
 app.use("/profile", express.static("upload"));
+app.use("/api",customerRouter);
+app.use("/api",adminRouter);
+app.use("/api",userRouter);
+app.use("/api",driverRouter);
+
+
+//////////
+app.use(function (err, req, res, next) {
+  res.locals.message = err.message;
+  res.locals.error = req.app.get("env") === "development" ? err : {};
+
+  // render the error page
+  res.status(err.status || 500);
+  res.render("error");
+});
+app.use(
+  cors({
+    origin: "*",
+    optionsSuccessStatus: 200,
+    credentials: true,
+  })
+);
+app.options(
+  "*",
+  cors({
+    origin: "*",
+    optionsSuccessStatus: 200,
+    credentials: true,
+  })
+);
+///////////
 mongoose.set("strictQuery", false);
 
 mongoose
@@ -29,10 +60,8 @@ mongoose
 
 
 
-app.use("/api",customerRouter);
-app.use("/api",adminRouter);
-app.use("/api",userRouter);
-app.use("/api",driverRouter);
+
+
 
 const PORT = process.env.PORT || 5000;
 
