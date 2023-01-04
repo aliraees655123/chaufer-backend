@@ -33,9 +33,10 @@ app.use("/api",customerRouter);
 app.use("/api",adminRouter);
 app.use("/api",userRouter);
 app.use("/api",driverRouter);
-const PORT = process.env.PORT || 5000;
 
-app.listen(PORT,()=>{
-  console.log(`listening on port ${PORT}`);
+// const PORT = process.env.PORT || 5000;
 
-})
+// app.listen(PORT,()=>{
+//   console.log(`listening on port ${PORT}`);
+
+// })
