@@ -8,6 +8,7 @@ import customerRouter from "./Routes/CustomerRoutes.js"
 import adminRouter from "./Routes/AdminRoutes.js"
 import userRouter from "./Routes/UserRoutes.js"
 import driverRouter from "./Routes/DriverRoutes.js"
+
 const app= express();
 
 app.use(express.json());
@@ -63,16 +64,16 @@ mongoose
 
 
 
-const PORT = process.env.PORT || 5000;
+// const PORT = process.env.PORT || 5000;
 
-app.listen(PORT,()=>{
-  console.log(`listening on port ${PORT}`);
-
-})
-
-// app.listen(5000,()=>{
-//   console.log(`listening on port 5000`);
+// app.listen(PORT,()=>{
+//   console.log(`listening on port ${PORT}`);
 
 // })
+
+app.listen(5000,()=>{
+  console.log(`listening on port 5000`);
+
+})
 
 

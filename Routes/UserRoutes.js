@@ -11,7 +11,7 @@ import { editProfile } from "../Controllers/UserController.js";
 
 router.post("/forgotPassword", forgetPassword);
 router.put("/resetPassword", resetPassword);
-router.put("/editProfile", resetPassword);
+router.put("/editProfile/:id", editProfile);
 
 
 
