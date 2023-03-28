@@ -34,6 +34,9 @@ let vehicleSchema=new mongoose.Schema(
         },
         driverEmail:{
             type:String
+        },
+        hourPrice:{
+            type:String
         }
 
     }

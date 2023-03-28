@@ -10,25 +10,25 @@ import { v4 as uuidv4 } from 'uuid';
 //register customer
 export async function registerCustomer(req, res) {
   const { name, email, phone, password, userType } = req.body;
-  console.log("req.body", req.body);
+  console.log("req.body=========register", req.body);
   const checkMail = await Customer.find({ email });
   if (checkMail.length != 0) {
-    return next(new AppError("Email Already Exists", 400));
+    // return next(new AppError("Email Already Exists", 400));
   }
   if (!(email && password)) {
-    return next(new AppError("Please Provide Email and Password"));
+    // return next(new AppError("Please Provide Email and Password"));
   }
   const hasedpassword = bcrypt.hashSync(password, 10);
 
   const newUser = new Customer({
     name,
-
     email,
     phone,
     password: hasedpassword,
     userType,
   });
   const user = await newUser.save();
+  console.log("user",user)
   res.status(201).json({ success: true, user, message: "Succesfully Created" });
 }
 //login customer
@@ -38,6 +38,14 @@ export async function loginCustomer(req, res) {
 
   try {
     let data = await Customer.findOne({ email: email });
+
+    if(!data)
+    {
+      res.status(401).json({
+        message: "No User Exist with Email",
+        status: false,
+      });
+    }
     console.log("=========", data);
     const isMatch = await bcrypt.compare(password, data.password);
     console.log("isMatch", isMatch);
@@ -52,12 +60,14 @@ export async function loginCustomer(req, res) {
     } else {
       res.status(400).json({
         message: "Invalid Email or password",
+        status: false,
       });
     }
   } catch (error) {
     console.log(error);
     res.status(500).json({
       Error_Message: error,
+      status: false,
     });
   }
 }
@@ -76,7 +86,7 @@ export async function getPricing(req, res) {
 //booking
 export async function bookVehicle(req, res) {
   const {
-    passenger,
+ 
     pickUpDate,
     bookingAmount,
     pickUpLocation,
@@ -85,13 +95,14 @@ export async function bookVehicle(req, res) {
     pickUpTime,
     returnPickUpTime,
     returnPickUpDate,
+    hourlyDuration
   } = req.body;
   let booking=null;
   if(userId)
   {
     console.log("usidExist");
      booking = new Booking({
-      passenger,
+
   
       bookingAmount,
   
@@ -102,13 +113,14 @@ export async function bookVehicle(req, res) {
       pickUpTime,
       returnPickUpTime,
       returnPickUpDate,
+      hourlyDuration,
       userId,
     });
   }
   else{
     console.log("userId not exist");
     booking = new Booking({
-      passenger,
+
   
       bookingAmount,
   
@@ -119,6 +131,7 @@ export async function bookVehicle(req, res) {
       pickUpTime,
       returnPickUpTime,
       returnPickUpDate,
+      hourlyDuration
 
     });
 

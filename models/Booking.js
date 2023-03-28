@@ -41,6 +41,10 @@ let bookingSchema=new mongoose.Schema(
             type:String
           
         },
+        hourlyDuration:{
+            type:String
+          
+        },
         
 
 

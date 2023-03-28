@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-let customerSchema=new mongoose.Schema(
+let UserSchema=new mongoose.Schema(
     {
         email:{
             type:String,
@@ -10,7 +10,7 @@ let customerSchema=new mongoose.Schema(
             type:String,
             default:''
         },
-        phone:{
+        fullName:{
             type:String,
             default:''
         },
@@ -18,13 +18,15 @@ let customerSchema=new mongoose.Schema(
             type:String
           
         },
-        userType:{
+        phone:{
             type:String
-        }
+          
+        },
+      
 
 
     }
 )
 
 
-export default customerSchema =mongoose.model("Customer",customerSchema)
+export default UserSchema =mongoose.model("Customer",UserSchema)

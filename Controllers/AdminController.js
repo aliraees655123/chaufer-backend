@@ -5,10 +5,10 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import Admin from "../models/Admin.js";
 import Pricing from "../models/Pricing.js";
-
+import { SERVERURL } from "../ServerUrl.js";
 //add vehicle
 export async function addVehicle(req, res) {
-  const { catagory, company, passenger, luggage, price, availability ,driverEmail,driverId} =
+  const { catagory, company, passenger, luggage, price, availability ,driverEmail,driverId,hourPrice} =
     req.body;
 
   const vehicle = new Vehicle({
@@ -20,7 +20,8 @@ export async function addVehicle(req, res) {
     availability,
     driverEmail,
     driverId,
-    image: `http://localhost:5000/profile/${req.file.filename}`,
+    hourPrice,
+    image: `${SERVERURL}/profile/${req.file.filename}`,
     
   });
   const vehicleNew = await vehicle.save();
@@ -40,10 +41,10 @@ export async function updateVehicle(req, res) {
   let { id } = req.params;
   const { catagory, company, passenger, luggage, price, availability } =
     req.body;
-
+console.log(req.body)
   try {
     let data = await Vehicle.findById({ _id: id });
-
+console.log("data",data)
     data.catagory = req.body.catagory;
     data.company = req.body.company;
     data.passenger = req.body.passenger;
@@ -51,16 +52,26 @@ export async function updateVehicle(req, res) {
     data.price = req.body.price;
     data.availability = req.body.availability;
     data.driverEmail = req.body.driverEmail;
-    data.driverId = req.body.driverId;
+    data.hourPrice = req.body.hourPrice;
+    // data.driverId = req.body.driverId;
+
+if(req.file)
+{
+  data.image = `${SERVERURL}/profile/${req.file.filename}`;
 
 
-    data.image = `http://localhost:5000/profile/${req.file.filename}`;
+}
 
-    let dataDriver = await Driver.findById({ _id: req.body.driverId });
+    // let dataDriver = await Driver.findById({ _id: req.body.driverId });
 
-    dataDriver.assigned = true;
-  
-    await dataDriver.save();
+    // console.log("dataDriver",dataDriver)
+    
+    // if(dataDriver)
+    // {
+    //   dataDriver.assigned = true;
+    //   await dataDriver.save();
+
+    // }
     await data.save();
     console.log("dataCompleProfile123", data);
     if (data) {
@@ -92,14 +103,14 @@ export async function deleteVehicle(req, res) {
 
 //add driver
 export async function addDriver(req, res) {
-  const { name, email, phone, address,password } = req.body;
+  const { name, email, phone, address,password,type } = req.body;
  const hasedpassword = bcrypt.hashSync(password, 10);
   const driver = new Driver({
     name,
     email,
     phone,
     address,
-    
+    type,
     password:hasedpassword
   });
   const newDriver = await driver.save();
@@ -114,13 +125,23 @@ export async function updateDriver(req, res) {
 
   try {
     let data = await Driver.findById({ _id: id });
-    const hasedpassword = bcrypt.hashSync(req.body.password, 10);
+    let hasedpassword;
+    if(req.body.password)
+    {
+     hasedpassword = bcrypt.hashSync(req.body.password, 10);
+
+    }
 
     data.name = req.body.name;
     data.email = req.body.email;
     data.phone = req.body.phone;
     data.address = req.body.address;
-    data.password = hasedpassword;
+    data.type = req.body.type;
+    if(hasedpassword)
+    {
+
+      data.password = hasedpassword;
+    }
 
     await data.save();
     console.log("dataCompleProfile123", data);
@@ -255,4 +276,12 @@ export async function loginAdmin(req, res) {
       Error_Message: error,
     });
   }
+}
+//delete customer
+export async function deleteCustomer(req, res) {
+  const deleteCustomer = await Customer.findByIdAndRemove(req.params.id);
+  if (!deleteDriver) {
+    return next(new AppError("Invalid Vehicle Id Provided", 400));
+  }
+  res.json({ success: true, deleteCustomer, message: "Customer Deleted" });
 }
