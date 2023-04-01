@@ -21,7 +21,7 @@ export async function addVehicle(req, res) {
     driverEmail,
     driverId,
     hourPrice,
-    image: `${SERVERURL}/profile/${req.file.filename}`,
+    image:`${SERVERURL}/profile/${req.file.filename}`,
     
   });
   const vehicleNew = await vehicle.save();
@@ -57,7 +57,7 @@ console.log("data",data)
 
 if(req.file)
 {
-  data.image = `${SERVERURL}/profile/${req.file.filename}`;
+  data.image =`${SERVERURL}/profile/${req.file.filename}`;
 
 
 }
